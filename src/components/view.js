@@ -11,6 +11,7 @@ export default {
     }
   },
   render (_, { props, children, parent, data }) {
+    debugger
     // used by devtools to display a router-view badge
     data.routerView = true
 
@@ -51,17 +52,14 @@ export default {
       return h()
     }
 
-    const component = cache[name] = matched.components[name]
+    const component = (cache[name] = matched.components[name])
 
     // attach instance registration hook
     // this will be called in the instance's injected lifecycle hooks
     data.registerRouteInstance = (vm, val) => {
       // val could be undefined for unregistration
       const current = matched.instances[name]
-      if (
-        (val && current !== vm) ||
-        (!val && current === vm)
-      ) {
+      if ((val && current !== vm) || (!val && current === vm)) {
         matched.instances[name] = val
       }
     }
@@ -74,8 +72,9 @@ export default {
 
     // register instance in init hook
     // in case kept-alive component be actived when routes changed
-    data.hook.init = (vnode) => {
-      if (vnode.data.keepAlive &&
+    data.hook.init = vnode => {
+      if (
+        vnode.data.keepAlive &&
         vnode.componentInstance &&
         vnode.componentInstance !== matched.instances[name]
       ) {
@@ -84,12 +83,15 @@ export default {
     }
 
     // resolve props
-    let propsToPass = data.props = resolveProps(route, matched.props && matched.props[name])
+    let propsToPass = (data.props = resolveProps(
+      route,
+      matched.props && matched.props[name]
+    ))
     if (propsToPass) {
       // clone to prevent mutation
       propsToPass = data.props = extend({}, propsToPass)
       // pass non-declared props as attrs
-      const attrs = data.attrs = data.attrs || {}
+      const attrs = (data.attrs = data.attrs || {})
       for (const key in propsToPass) {
         if (!component.props || !(key in component.props)) {
           attrs[key] = propsToPass[key]
@@ -117,7 +119,7 @@ function resolveProps (route, config) {
         warn(
           false,
           `props in "${route.path}" is a ${typeof config}, ` +
-          `expecting an object, function or boolean.`
+            `expecting an object, function or boolean.`
         )
       }
   }

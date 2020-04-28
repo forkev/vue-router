@@ -44,6 +44,7 @@ export class History {
   }
 
   listen (cb: Function) {
+    debugger
     this.cb = cb
   }
 

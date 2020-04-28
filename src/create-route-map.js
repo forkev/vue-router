@@ -14,6 +14,7 @@ export function createRouteMap (
   pathMap: Dictionary<RouteRecord>,
   nameMap: Dictionary<RouteRecord>
 } {
+  // debugger
   // the path list is used to control path matching priority
   const pathList: Array<string> = oldPathList || []
   // $flow-disable-line
@@ -37,12 +38,15 @@ export function createRouteMap (
   if (process.env.NODE_ENV === 'development') {
     // warn if routes do not include leading slashes
     const found = pathList
-    // check for missing leading slash
+      // check for missing leading slash
       .filter(path => path && path.charAt(0) !== '*' && path.charAt(0) !== '/')
 
     if (found.length > 0) {
       const pathNames = found.map(path => `- ${path}`).join('\n')
-      warn(false, `Non-nested routes must include a leading slash character. Fix the following routes: \n${pathNames}`)
+      warn(
+        false,
+        `Non-nested routes must include a leading slash character. Fix the following routes: \n${pathNames}`
+      )
     }
   }
 
@@ -112,9 +116,7 @@ function addRouteRecord (
         warn(
           false,
           `Named Route '${route.name}' has a default child route. ` +
-            `When navigating to this named route (:to="{name: '${
-              route.name
-            }'"), ` +
+            `When navigating to this named route (:to="{name: '${route.name}'"), ` +
             `the default child route will not be rendered. Remove the name from ` +
             `this route and use the name of the default child route for named ` +
             `links instead.`

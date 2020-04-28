@@ -4,6 +4,7 @@ import Link from './components/link'
 export let _Vue
 
 export function install (Vue) {
+  // debugger
   if (install.installed && _Vue === Vue) return
   install.installed = true
 
@@ -13,13 +14,18 @@ export function install (Vue) {
 
   const registerInstance = (vm, callVal) => {
     let i = vm.$options._parentVnode
-    if (isDef(i) && isDef(i = i.data) && isDef(i = i.registerRouteInstance)) {
+    if (
+      isDef(i) &&
+      isDef((i = i.data)) &&
+      isDef((i = i.registerRouteInstance))
+    ) {
       i(vm, callVal)
     }
   }
 
   Vue.mixin({
     beforeCreate () {
+      debugger
       if (isDef(this.$options.router)) {
         this._routerRoot = this
         this._router = this.$options.router
@@ -36,11 +42,15 @@ export function install (Vue) {
   })
 
   Object.defineProperty(Vue.prototype, '$router', {
-    get () { return this._routerRoot._router }
+    get () {
+      return this._routerRoot._router
+    }
   })
 
   Object.defineProperty(Vue.prototype, '$route', {
-    get () { return this._routerRoot._route }
+    get () {
+      return this._routerRoot._route
+    }
   })
 
   Vue.component('RouterView', View)
@@ -48,5 +58,6 @@ export function install (Vue) {
 
   const strats = Vue.config.optionMergeStrategies
   // use the same hook merging strategy for route hooks
-  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate =
+    strats.created
 }

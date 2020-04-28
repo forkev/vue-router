@@ -33,6 +33,7 @@ export default {
     }
   },
   render (h: Function) {
+    // debugger
     const router = this.$router
     const current = this.$route
     const { location, route, href } = router.resolve(
@@ -106,9 +107,7 @@ export default {
         if (process.env.NODE_ENV !== 'production') {
           warn(
             false,
-            `RouterLink with to="${
-              this.props.to
-            }" is trying to use a scoped slot but it didn't provide exactly one child.`
+            `RouterLink with to="${this.props.to}" is trying to use a scoped slot but it didn't provide exactly one child.`
           )
         }
         return scopedSlot.length === 0 ? h() : h('span', {}, scopedSlot)

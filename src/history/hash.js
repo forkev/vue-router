@@ -52,6 +52,7 @@ export class HashHistory extends History {
     this.transitionTo(
       location,
       route => {
+        debugger
         pushHash(route.fullPath)
         handleScroll(this.router, route, fromRoute, false)
         onComplete && onComplete(route)

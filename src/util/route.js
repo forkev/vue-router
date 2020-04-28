@@ -11,6 +11,7 @@ export function createRoute (
   redirectedFrom?: ?Location,
   router?: VueRouter
 ): Route {
+  // debugger
   const stringifyQuery = router && router.options.stringifyQuery
 
   let query: any = location.query || {}
@@ -62,10 +63,7 @@ function formatMatch (record: ?RouteRecord): Array<RouteRecord> {
   return res
 }
 
-function getFullPath (
-  { path, query = {}, hash = '' },
-  _stringifyQuery
-): string {
+function getFullPath ({ path, query = {}, hash = '' }, _stringifyQuery): string {
   const stringify = _stringifyQuery || stringifyQuery
   return (path || '/') + stringify(query) + hash
 }
@@ -77,7 +75,8 @@ export function isSameRoute (a: Route, b: ?Route): boolean {
     return false
   } else if (a.path && b.path) {
     return (
-      a.path.replace(trailingSlashRE, '') === b.path.replace(trailingSlashRE, '') &&
+      a.path.replace(trailingSlashRE, '') ===
+        b.path.replace(trailingSlashRE, '') &&
       a.hash === b.hash &&
       isObjectEqual(a.query, b.query)
     )
@@ -114,15 +113,18 @@ function isObjectEqual (a = {}, b = {}): boolean {
 
 export function isIncludedRoute (current: Route, target: Route): boolean {
   return (
-    current.path.replace(trailingSlashRE, '/').indexOf(
-      target.path.replace(trailingSlashRE, '/')
-    ) === 0 &&
+    current.path
+      .replace(trailingSlashRE, '/')
+      .indexOf(target.path.replace(trailingSlashRE, '/')) === 0 &&
     (!target.hash || current.hash === target.hash) &&
     queryIncludes(current.query, target.query)
   )
 }
 
-function queryIncludes (current: Dictionary<string>, target: Dictionary<string>): boolean {
+function queryIncludes (
+  current: Dictionary<string>,
+  target: Dictionary<string>
+): boolean {
   for (const key in target) {
     if (!(key in current)) {
       return false
